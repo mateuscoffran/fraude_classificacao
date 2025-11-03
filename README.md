@@ -84,7 +84,7 @@ F2-Score = (1 + β²) × (Precision × Recall) / (β² × Precision + Recall) on
 
 ## 🏆 Resultados
 
-Após Engenharia de Features, Seleção de variáveis (Boruta), Otimização de  E hiperparâmetros (Optuna) ajuste do Threshold de decisão, O modelo com **melhor desempenho preditivo** foi o **XGBoost**.
+Após Engenharia de Features, Seleção de variáveis (Boruta), Otimização de hiperparâmetros (Optuna) e ajuste do Threshold de decisão, o modelo com **melhor desempenho preditivo** foi o **XGBoost**.
 
 ## 🧠 Interpretabilidade 
 Utilizando **SHAP (SHapley Additive exPlanations)**, foram identificadas as features mais importantes para a detecção de fraudes: 
