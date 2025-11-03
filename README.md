@@ -28,7 +28,7 @@ O projeto seguiu uma metodologia iterativa em ciclos, permitindo:
 
 ### Etapas Implementadas 
 
-#### 1️⃣ ** Preparação dos Dados** 
+#### 1️⃣ **Preparação dos Dados** 
 - Análise de desbalanceamento das classes 
 - Detecção de dados faltantes 
 
