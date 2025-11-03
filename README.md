@@ -8,7 +8,7 @@ O objetivo deste projeto é **construir Modelos de Machine Learning capazes de d
 
 O projeto foi desenvolvido em Jupyter Notebook. Todo o trabalho foi elaborado a partir de uma base de dados em Excel com diversas informações de transações financeiras. 
 
-A base de dados do case está disponível no seguinte link: Preparatório para Entrevistas em Dados (PED)
+A base de dados do case está disponível no seguinte link: [Preparatório para Entrevistas em Dados (PED)](https://renatabiaggi.com/ped/)
 
 ## 🛠️ Bibliotecas principais
 - `pandas` - Manipulação de dados 
