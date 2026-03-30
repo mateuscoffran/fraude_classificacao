@@ -1,0 +1,109 @@
+[tool.poetry]
+name        = "fraude-detector"
+version     = "1.0.0"
+description = ""
+authors     = ["Mateus Coffran Dantas <mateus_coffran@yahoo.com.br>"]
+readme = "README.md"
+packages    = [{ include = "src" }]
+ 
+[tool.poetry.dependencies]
+python             = ">=3.11,<3.13"
+ 
+# ── Core ML ───────────────────────────────────────────────────────────────────
+scikit-learn       = "1.7.2"
+xgboost            = "3.1.2"
+lightgbm           = "4.6.0"
+catboost           = "1.2.8"
+category-encoders  = "2.9.0"
+Boruta             = "0.4.3"
+shap               = "0.50.0"
+optuna             = "4.6.0"
+ 
+# ── Dados e manipulação ───────────────────────────────────────────────────────
+numpy              = "2.3.4"
+pandas             = "2.3.3"
+scipy              = "1.16.3"
+statsmodels        = "0.14.5"
+patsy              = "1.0.2"
+numba              = "0.62.1"
+numexpr            = "2.14.1"
+bottleneck         = "1.4.2"
+ 
+# ── Imputação ─────────────────────────────────────────────────────────────────
+fancyimpute        = "0.7.0"
+knnimpute          = "0.1.0"
+ 
+# ── Feature engineering ───────────────────────────────────────────────────────
+feature-engine     = "1.9.3"
+ 
+# ── Serialização e pipeline ───────────────────────────────────────────────────
+joblib             = "1.5.2"
+cloudpickle        = "3.1.2"
+ 
+# ── Leitura de arquivos ───────────────────────────────────────────────────────
+openpyxl           = "3.1.5"
+ 
+# ── Visualização ──────────────────────────────────────────────────────────────
+matplotlib         = "3.10.6"
+seaborn            = "0.13.2"
+plotly             = "6.5.0"
+missingno          = "0.5.2"
+graphviz           = "0.21"
+ 
+# ── NLP / Embeddings ──────────────────────────────────────────────────────────
+gensim             = "4.4.0"
+transformers       = "4.57.1"
+tokenizers         = "0.22.1"
+safetensors        = "0.6.2"
+huggingface-hub    = "0.36.0"
+regex              = "2025.11.3"
+ 
+# ── Utilitários ───────────────────────────────────────────────────────────────
+tqdm               = "4.67.1"
+tqdm-joblib        = "0.0.5"
+requests           = "2.32.5"
+pyyaml             = "6.0.2"
+rich               = "14.2.0"
+typing-extensions  = "4.15.0"
+packaging          = "25.0"
+filelock           = "3.20.0"
+fsspec             = "2025.10.0"
+ 
+# ── Otimização (usada pelo CVXPY / SHAP internamente) ────────────────────────
+cvxpy              = "1.7.3"
+fastapi = "^0.135.2"
+uvicorn = "^0.42.0"
+ 
+[tool.poetry.group.dev.dependencies]
+# ── Jupyter ───────────────────────────────────────────────────────────────────
+jupyter            = "1.1.1"
+jupyterlab         = "4.4.7"
+notebook           = "7.4.5"
+ipykernel          = "6.31.0"
+ipywidgets         = "8.1.7"
+nbformat           = "5.10.4"
+nbconvert          = "7.16.6"
+ 
+# ── Testes ────────────────────────────────────────────────────────────────────
+pytest             = "9.0.1"
+pytest-cov         = ">=5.0"
+ 
+# ── Qualidade de código ───────────────────────────────────────────────────────
+ruff               = ">=0.4"
+ 
+[tool.poetry.scripts]
+fraude-detector = "main:main"
+ 
+[build-system]
+requires      = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+ 
+# ── pytest ────────────────────────────────────────────────────────────────────
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts   = "-v --tb=short"
+ 
+# ── ruff ──────────────────────────────────────────────────────────────────────
+[tool.ruff]
+line-length    = 99
+target-version = "py310"
