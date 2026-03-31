@@ -1,0 +1,18 @@
+services:
+  fraud-detector:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: fraud-detector:latest
+    container_name: fraud-detector
+    ports:
+      - "8000:8000"      # porta_local:porta_container
+    environment:
+      - PYTHONUNBUFFERED=1
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s      # verifica a cada 30 segundos
+      timeout: 10s       # aguarda até 10 segundos por resposta
+      retries: 3         # tenta 3 vezes antes de marcar como unhealthy
+      start_period: 15s  # aguarda 15s antes da primeira verificação

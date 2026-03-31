@@ -1,0 +1,40 @@
+# Ambiente virtual local
+.venv/
+
+# Dados brutos — nunca entram na imagem
+data/
+
+# Notebooks — não necessários em produção
+notebooks/
+
+# Cache do Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Testes — não necessários em produção
+tests/
+
+# Controle de versão
+.git/
+.gitignore
+
+# Configurações locais
+.env
+.env.*
+
+# Arquivos temporários e logs
+*.log
+*.tmp
+*.bak
+*.zip
+
+# Configurações do editor
+.vscode/
+.idea/
+
+# Cache do pytest e ruff
+.pytest_cache/
+.ruff_cache/
