@@ -1,0 +1,78 @@
+# ══════════════════════════════════════════════════════════════════
+# CI/CD — Fraud Detector
+# ══════════════════════════════════════════════════════════════════
+#
+# Fluxo:
+#   1. A cada push ou pull request na branch main:
+#      → Instala dependências e roda os 35 testes com pytest
+#
+#   2. Se os testes passarem E o push for na branch main:
+#      → Constrói a imagem Docker
+#      → Publica no Docker Hub
+# ══════════════════════════════════════════════════════════════════
+
+name: CI/CD
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+
+  # ── Job 1: Testes ───────────────────────────────────────────────
+  tests:
+    name: Testes automatizados
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Configura o Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Instala o Poetry
+        run: pip install poetry==1.8.3
+
+      - name: Cache das dependências do Poetry
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pypoetry
+          key: poetry-${{ hashFiles('poetry.lock') }}
+          restore-keys: poetry-
+
+      - name: Instala as dependências
+        run: poetry install --no-interaction
+
+      - name: Roda os testes
+        run: poetry run pytest --tb=short -v
+
+  # ── Job 2: Build e push da imagem Docker ───────────────────────
+  docker:
+    name: Build e push Docker
+    runs-on: ubuntu-latest
+    needs: tests                  # só roda se os testes passarem
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Login no Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build e push da imagem
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/fraud-detector:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/fraud-detector:${{ github.sha }}
