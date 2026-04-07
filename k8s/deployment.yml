@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fraud-detector
+  labels:
+    app: fraud-detector
+spec:
+  replicas: 2
+
+  selector:
+    matchLabels:
+      app: fraud-detector
+
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+
+  template:
+    metadata:
+      labels:
+        app: fraud-detector
+    spec:
+      containers:
+        - name: fraud-detector
+          image: mateuscoffran/fraud-detector:latest
+          imagePullPolicy: Always
+
+          ports:
+            - containerPort: 8000
+
+          envFrom:
+            - configMapRef:
+                name: fraud-detector-config
+
+          # ── Recursos reduzidos para ambiente local com pouca RAM ───
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+            limits:
+              cpu: "500m"
+              memory: "768Mi"
+
+          # livenessProbe: verifica se a aplicação está viva
+          # Se falhar, o Kubernetes reinicia o container automaticamente
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 30
+            periodSeconds: 30
+            failureThreshold: 5
+            timeoutSeconds: 15
+
+          # readinessProbe: verifica se o Pod está pronto para receber tráfego
+          # Se falhar, remove o Pod do balanceador sem reiniciá-lo
+          # Útil durante o startup (carregamento do modelo XGBoost) e RollingUpdates
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 20
+            periodSeconds: 30
+            failureThreshold: 5
+            timeoutSeconds: 20

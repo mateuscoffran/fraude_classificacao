@@ -13,10 +13,12 @@ A documentação interativa fica disponível em:
 
 from __future__ import annotations
 
+import asyncio
 import logging
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 
 from .routes import router
 
@@ -44,8 +46,28 @@ app = FastAPI(
     redoc_url="/redoc",
 )
 
+# ── Timeout Middleware ─────────────────────────────────────────────────────────
+# Rejeita requisições que demorem mais de 10 segundos com erro 503.
+# Evita que o servidor fique enfileirando requisições indefinidamente
+# sob alta carga, retornando um erro claro ao invés de travar.
+@app.middleware("http")
+async def timeout_middleware(request: Request, call_next):
+    try:
+        return await asyncio.wait_for(call_next(request), timeout=10.0)
+    except asyncio.TimeoutError:
+        logging.warning(
+            "Timeout de 10s atingido para %s %s",
+            request.method,
+            request.url.path,
+        )
+        return JSONResponse(
+            status_code=503,
+            content={"detail": "Request timeout — servidor sobrecarregado"},
+        )
+
 # ── CORS ───────────────────────────────────────────────────────────────────────
 # Permite chamadas de qualquer origem em desenvolvimento.
+# Em produção, substitua ["*"] pela lista de domínios permitidos.
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
